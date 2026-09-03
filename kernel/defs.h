@@ -26,6 +26,12 @@ void            consputc(int);
 // exec.c
 int             kexec(char*, char**);
 
+// fdt.c
+void            fdtinit(void *);
+extern uint64   ram_base;
+extern uint64   ram_size;
+extern uint64   phystop;
+
 // file.c
 struct file*    filealloc(void);
 void            fileclose(struct file*);
@@ -121,6 +127,9 @@ void            acquiresleep(struct sleeplock*);
 void            releasesleep(struct sleeplock*);
 int             holdingsleep(struct sleeplock*);
 void            initsleeplock(struct sleeplock*, char*);
+
+// start.c
+extern uint64   boot_dtb_pa;
 
 // string.c
 int             memcmp(const void*, const void*, uint);

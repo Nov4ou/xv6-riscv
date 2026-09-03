@@ -16,6 +16,18 @@ main()
     printk("\n");
     printk("xv6 kernel is booting\n");
     printk("\n");
+
+    //
+    // Paging is still disabled here, so boot_dtb_pa
+    // can be used directly as a physical address.
+    //
+    fdtinit((void *)boot_dtb_pa);
+
+    printk("DTB physical address: %p\n", (void *)boot_dtb_pa);
+    printk("RAM base:             %p\n", (void *)ram_base);
+    printk("RAM size:             %ld MiB\n", ram_size / (1024 * 1024));
+    printk("RAM end:              %p\n", (void *)phystop);
+
     kinit();            // physical page allocator
     kvminit();          // create kernel page table
     kvminithart();      // turn on paging

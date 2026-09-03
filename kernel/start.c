@@ -10,10 +10,15 @@ void timerinit();
 // entry.S needs one stack per CPU.
 __attribute__((aligned(16))) char stack0[4096 * NCPU];
 
+uint64 boot_dtb_pa;
+
 // entry.S jumps here in machine mode on stack0.
 void
-start()
+start(uint64 hartid, uint64 dtb_pa)
 {
+  if (hartid == 0)
+    boot_dtb_pa = dtb_pa;
+
   // set M Previous Privilege mode to Supervisor, for mret.
   unsigned long x = r_mstatus();
   x &= ~MSTATUS_MPP_MASK;
