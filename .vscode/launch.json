@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug xv6",
+            "type": "cppdbg",
+            "request": "launch",
+
+            "program": "${workspaceFolder}/kernel/kernel",
+            "cwd": "${workspaceFolder}",
+
+            "MIMode": "gdb",
+            "miDebuggerPath": "/opt/homebrew/bin/riscv64-elf-gdb",
+
+            "miDebuggerServerAddress": "localhost:26000",
+
+            "preLaunchTask": "Start xv6 QEMU",
+
+            "stopAtEntry": false,
+            "externalConsole": false
+        }
+    ]
+}
