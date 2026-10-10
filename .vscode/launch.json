@@ -7,12 +7,28 @@
             "request": "launch",
 
             "program": "${workspaceFolder}/kernel/kernel",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/.vscode",
 
             "MIMode": "gdb",
             "miDebuggerPath": "/opt/homebrew/bin/riscv64-elf-gdb",
+            "miDebuggerArgs": "--nx",
 
             "miDebuggerServerAddress": "localhost:26000",
+
+            "setupCommands": [
+                {
+                    "text": "set architecture riscv:rv64"
+                },
+                {
+                    "text": "directory ${workspaceFolder}"
+                },
+                {
+                    "text": "set disassemble-next-line auto"
+                },
+                {
+                    "text": "set riscv use-compressed-breakpoints yes"
+                }
+            ],
 
             "preLaunchTask": "Start xv6 QEMU",
 
