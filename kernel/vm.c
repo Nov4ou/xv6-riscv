@@ -115,6 +115,44 @@ walk(pagetable_t pagetable, uint64 va, int alloc)
   return &pagetable[PX(0, va)];
 }
 
+// Recursively print all valid PTEs in a page-table tree.
+// level is 2 for the root, then 1, then 0.
+static void
+vmprintwalk(pagetable_t pagetable, int level)
+{
+  for (int i = 0; i < 512; i++) {
+    pte_t pte = pagetable[i];
+
+    // Invalid PTEs do not represent mappings or child page tables.
+    if ((pte & PTE_V) == 0)
+      continue;
+
+    // Root entries get one "..", level-1 entries get two,
+    // and level-0 entries get three.
+    for (int depth = 0; depth < 3 - level; depth++)
+      printk(" ..");
+
+    uint64 pa = PTE2PA(pte);
+
+    printk("%d: pte %p pa %p\n", i, (void *)pte, (void *)pa);
+
+    // A valid PTE with none of R/W/X set points to a
+    // lower-level page table rather than a mapped page.
+    //
+    // level > 0 prevents following a malformed non-leaf
+    // entry below level 0.
+    if ((pte & (PTE_R | PTE_W | PTE_X)) == 0 && level > 0)
+      vmprintwalk((pagetable_t)pa, level - 1);
+  }
+}
+
+void
+vmprint(pagetable_t pagetable)
+{
+  printk("page table %p\n", pagetable);
+  vmprintwalk(pagetable, 2);
+}
+
 // Look up a virtual address, return the physical address,
 // or 0 if not mapped.
 // Can only be used to look up user pages.
